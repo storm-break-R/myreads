@@ -1,26 +1,8 @@
-import { useEffect, useState } from "react";
-import * as BooksAPI from "../BooksAPI";
 import React from "react";
 import { Link } from "react-router-dom";
 import Books from "./books";
 
-export default function Home() {
-    const [allBooksList, setAllBooksList] = useState([]);
-
-    useEffect(() => {
-        BooksAPI.getAll().then((books) => {
-            setAllBooksList(books);
-        });
-    }, []);
-
-    const changeShelf = (book, newShelf) => {
-        BooksAPI.update(book, newShelf).then(() => {
-            BooksAPI.getAll().then((books) => {
-                setAllBooksList(books);
-            });
-        });
-    };
-
+export default function Home({ books, onShelfChange }) {
     return (
         <div className="list-books">
             <div className="list-books-title">
@@ -33,10 +15,10 @@ export default function Home() {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {
-                                    allBooksList
+                                    books
                                         .filter((book) => book.shelf === "currentlyReading")
                                         .map((book) => (
-                                            <Books key={book.id} book={book} shelfChange={changeShelf}/>
+                                            <Books key={book.id} book={book} shelfChange={onShelfChange}/>
                                         ))
                                 }
                             </ol>
@@ -47,10 +29,10 @@ export default function Home() {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {
-                                    allBooksList
+                                    books
                                         .filter((book) => book.shelf === "wantToRead")
                                         .map((book) => (
-                                            <Books key={book.id} book={book} shelfChange={changeShelf} />
+                                            <Books key={book.id} book={book} shelfChange={onShelfChange} />
                                         ))
                                 }
                             </ol>
@@ -61,10 +43,10 @@ export default function Home() {
                         <div className="bookshelf-books">
                             <ol className="books-grid">
                                 {
-                                    allBooksList
+                                    books
                                         .filter((book) => book.shelf === "read")
                                         .map((book) => (
-                                            <Books key={book.id} book={book} shelfChange={changeShelf} />
+                                            <Books key={book.id} book={book} shelfChange={onShelfChange} />
                                         ))
                                 }
                             </ol>

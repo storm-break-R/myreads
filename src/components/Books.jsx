@@ -1,6 +1,10 @@
 import React from "react";
+import BookDetail from "./BookDetail";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Books(props) {
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const newShelf = e.target.value;
@@ -9,18 +13,22 @@ export default function Books(props) {
         }
     }
 
+    const bookDetail = () => {
+        navigate("/book-detail", { state: { book: props.book } });
+    };
+
     return (
         <li>
             <div className="book">
-                <div className="book-top">
+                <div className="book-top" onClick={bookDetail}>
                     <img
                         className="book-cover"
                         src={props.book.imageLinks?.thumbnail}
                         alt={props.book.title}
                     />
                     <div className="book-shelf-changer">
-                        <select value={props.book.shelf || "none"} onChange={handleChange}>
-                            <option value="none" disabled>
+                        <select value={props.book.shelf || "none"} onChange={handleChange} onClick={(e) => e.stopPropagation()}>
+                            <option value="void" disabled>
                                 Move to...
                             </option>
                             <option value="currentlyReading">Currently Reading</option>
